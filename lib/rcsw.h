@@ -4,11 +4,11 @@
 typedef enum Mode
 {
 	SYNC,
-    syncHigh,
-    syncLow,
-    
-    dataL,
-    dataH
+	syncHigh,
+	syncLow,
+	
+	dataL,
+	dataH
     
 };
 
@@ -16,28 +16,28 @@ typedef enum Mode
 typedef struct
 {
 	enum Mode md;
-    
-    char name;
-
+	
+	char name;
+	
 	int counter;
-
+	
 	int current_state;
-    
+	
 	char syncH;
 	char syncL;
-    
-    char data_H;
-    char data_L;
-    
-    char data_A;
-    char data_B;
-    char data_C;
-
-    int current_data;
-    
+	
+	char data_H;
+	char data_L;
+	
+	char data_A;
+	char data_B;
+	char data_C;
+	
+	int current_data;
+	
 	char current_bit;
-    
-    void (*fn)(char name);
+	
+	void (*fn)(char name);
 
 } rcSW;
 

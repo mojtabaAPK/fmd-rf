@@ -42,24 +42,24 @@ void PA4_Level_Change_INITIAL(void)
 	TRISA4 = 1;
 	PAIF = 0;
 	IOCA4 = 1;
-    WPUA4 = 1;
-    nPAPU = 0;
+	WPUA4 = 1;
+	nPAPU = 0;
 	PAIE = 1; 
-    PAIF = 0;
+	PAIF = 0;
 }
 
 void t0_init(void)
 {
 	T0CS = 0;
-    PSA = 0;
-    PS0 = 0;
-    PS1 = 0;
-    PS2 = 0;
-    
-    T0IE = 1;
-    T0IF = 0;
-    
-    TMR0 = t0_value;
+	PSA = 0;
+	PS0 = 0;
+	PS1 = 0;
+	PS2 = 0;
+	
+	T0IE = 1;
+	T0IF = 0;
+	
+	TMR0 = t0_value;
 }
 
 void interrupt ISR(void)
@@ -72,54 +72,53 @@ void interrupt ISR(void)
 	}
 
 	if(T0IE && T0IF)
-    {
+	{
 		T0IF = 0;
-        TMR0 = t0_value;
-        
-        rc_update_time(&rc);
-    }
+		TMR0 = t0_value;
+	
+		rc_update_time(&rc);
+	}
 }
 
 void on_rc_receive(char name)
 {
 	a = rc.data_A;
-    b = rc.data_B;
-    c = rc.data_C;
+	b = rc.data_B;
+	c = rc.data_C;
+	
+	
+	// check 24 bit data
+	// 0010_1111___0111_1111___1011_0001
+	// __data_A_____data_B______data_C__
     
     
-    // check 24 bit data
-    // 0010_1111___0111_1111___1011_0001
-    // __data_A_____data_B______data_C__
-    
-    
-    if(rc.data_A == 0b00101111 && rc.data_B == 0b01111111 && rc.data_C == 0b10110001 )
-    {
-		
+	if(rc.data_A == 0b00101111 && rc.data_B == 0b01111111 && rc.data_C == 0b10110001 )
+	{
 		PA3 = !PA3;
-        rc.data_A = 0;
-        rc.data_B = 0;
-        rc.data_C = 0;
-    }
+		rc.data_A = 0;
+		rc.data_B = 0;
+		rc.data_C = 0;
+	}
 }
 
 main()
 {
 	OSCCON = 0B01110000;
-
-    TRISA3 = 0;    
-    PA3 = 0;
-    
-    rc.fn = &on_rc_receive;
-
-    PA4_Level_Change_INITIAL();
-
-    t0_init();
-
+	
+	TRISA3 = 0;    
+	PA3 = 0;
+	
+	rc.fn = &on_rc_receive;
+	
+	PA4_Level_Change_INITIAL();
+	
+	t0_init();
+	
 	GIE = 1;
 
-    while(1)
-    {
+	while(1)
+	{
 		NOP();
-    }
+	}
 }
 

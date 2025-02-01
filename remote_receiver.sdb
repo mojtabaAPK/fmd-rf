@@ -1,0 +1,149 @@
+[p PRO_MODE GLOBOPT AUTOSTATIC RSC14 PICREGULAR PICMID SPACEOPT ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip FT60F21X ]
+[d frameptr 6 ]
+"15 C:\project\fmd\remote receiver\remote_receiver\remote_receiver.C
+[e E901 Mode `uc
+SYNC 0
+syncHigh 1
+syncLow 2
+dataL 3
+dataH 4
+]
+"38 C:\project\fmd\remote receiver\remote_receiver\lib\rcSW.c
+[e E1 Mode `uc
+SYNC 0
+syncHigh 1
+syncLow 2
+dataL 3
+dataH 4
+]
+"62 C:\Program Files (x86)\FMD\Compiler\data\sources\common\float.c
+[v ___ftpack __ftpack `(f  1 e 3 0 ]
+"86 C:\Program Files (x86)\FMD\Compiler\data\sources\common\ftadd.c
+[v ___ftadd __ftadd `(f  1 e 3 0 ]
+"37 C:\project\fmd\remote receiver\remote_receiver\lib\rcSW.c
+[v _rc_update_port rc_update_port `(v  1 e 1 0 ]
+"184
+[v _rc_update_time rc_update_time `(v  1 e 1 0 ]
+"258
+[v _shift_bit shift_bit `(v  1 e 1 0 ]
+"19 C:\project\fmd\remote receiver\remote_receiver\remote_receiver.C
+[v _DelayUs DelayUs `(v  1 e 1 0 ]
+"40
+[v _PA4_Level_Change_INITIAL PA4_Level_Change_INITIAL `(v  1 e 1 0 ]
+"51
+[v _t0_init t0_init `(v  1 e 1 0 ]
+"65
+[v _ISR ISR `II(v  1 e 1 0 ]
+"83
+[v _on_rc_receive on_rc_receive `(v  1 e 1 0 ]
+"105
+[v _main main `(i  1 e 2 0 ]
+"10 C:\Program Files (x86)\FMD\Compiler\data\include\FT60F21X.h
+[v _TMR0 TMR0 `VEuc  1 e 1 @1 ]
+"71
+[v _PA3 PA3 `VEb  1 e 0 @43 ]
+"72
+[v _PA4 PA4 `VEb  1 e 0 @44 ]
+"117
+[v _PAIF PAIF `VEb  1 e 0 @88 ]
+"119
+[v _T0IF T0IF `VEb  1 e 0 @90 ]
+"120
+[v _PAIE PAIE `VEb  1 e 0 @91 ]
+"122
+[v _T0IE T0IE `VEb  1 e 0 @93 ]
+"124
+[v _GIE GIE `VEb  1 e 0 @95 ]
+"440
+[v _PS0 PS0 `VEb  1 e 0 @1032 ]
+"441
+[v _PS1 PS1 `VEb  1 e 0 @1033 ]
+"442
+[v _PS2 PS2 `VEb  1 e 0 @1034 ]
+"443
+[v _PSA PSA `VEb  1 e 0 @1035 ]
+"445
+[v _T0CS T0CS `VEb  1 e 0 @1037 ]
+"447
+[v _nPAPU nPAPU `VEb  1 e 0 @1039 ]
+"472
+[v _TRISA3 TRISA3 `VEb  1 e 0 @1067 ]
+"473
+[v _TRISA4 TRISA4 `VEb  1 e 0 @1068 ]
+"586
+[v _OSCCON OSCCON `VEuc  1 e 1 @143 ]
+"658
+[v _WPUA4 WPUA4 `VEb  1 e 0 @1196 ]
+"702
+[v _IOCA4 IOCA4 `VEb  1 e 0 @1204 ]
+[s S392 . 17 `E901 1 md 1 0 `uc 1 name 1 1 `i 1 counter 2 2 `i 1 current_state 2 4 `uc 1 syncH 1 6 `uc 1 syncL 1 7 `uc 1 data_H 1 8 `uc 1 data_L 1 9 `uc 1 data_A 1 10 `uc 1 data_B 1 11 `uc 1 data_C 1 12 `i 1 current_data 2 13 `uc 1 current_bit 1 15 `*.27(v 1 fn 1 16 ]
+"15 C:\project\fmd\remote receiver\remote_receiver\remote_receiver.C
+[v _rc rc `S392  1 e 17 0 ]
+"17
+[v _a a `VEuc  1 e 1 0 ]
+[v _b b `VEuc  1 e 1 0 ]
+[v _c c `VEuc  1 e 1 0 ]
+"105
+[v _main main `(i  1 e 2 0 ]
+{
+"124
+} 0
+"51
+[v _t0_init t0_init `(v  1 e 1 0 ]
+{
+"63
+} 0
+"40
+[v _PA4_Level_Change_INITIAL PA4_Level_Change_INITIAL `(v  1 e 1 0 ]
+{
+"49
+} 0
+"65
+[v _ISR ISR `II(v  1 e 1 0 ]
+{
+"81
+} 0
+"184 C:\project\fmd\remote receiver\remote_receiver\lib\rcSW.c
+[v _rc_update_time rc_update_time `(v  1 e 1 0 ]
+{
+[s S392 . 17 `E901 1 md 1 0 `uc 1 name 1 1 `i 1 counter 2 2 `i 1 current_state 2 4 `uc 1 syncH 1 6 `uc 1 syncL 1 7 `uc 1 data_H 1 8 `uc 1 data_L 1 9 `uc 1 data_A 1 10 `uc 1 data_B 1 11 `uc 1 data_C 1 12 `i 1 current_data 2 13 `uc 1 current_bit 1 15 `*.27(v 1 fn 1 16 ]
+[v rc_update_time@rc rc `*.4S392  1 a 1 wreg ]
+[v rc_update_time@rc rc `*.4S392  1 a 1 wreg ]
+"187
+"184
+[v rc_update_time@rc rc `*.4S392  1 a 1 3 ]
+"256
+} 0
+"83 C:\project\fmd\remote receiver\remote_receiver\remote_receiver.C
+[v _on_rc_receive on_rc_receive `(v  1 e 1 0 ]
+{
+[v on_rc_receive@name name `uc  1 p 1 0 ]
+"103
+} 0
+"37 C:\project\fmd\remote receiver\remote_receiver\lib\rcSW.c
+[v _rc_update_port rc_update_port `(v  1 e 1 0 ]
+{
+[s S392 . 17 `E901 1 md 1 0 `uc 1 name 1 1 `i 1 counter 2 2 `i 1 current_state 2 4 `uc 1 syncH 1 6 `uc 1 syncL 1 7 `uc 1 data_H 1 8 `uc 1 data_L 1 9 `uc 1 data_A 1 10 `uc 1 data_B 1 11 `uc 1 data_C 1 12 `i 1 current_data 2 13 `uc 1 current_bit 1 15 `*.27(v 1 fn 1 16 ]
+[v rc_update_port@rc rc `*.4S392  1 a 1 wreg ]
+[v rc_update_port@rc rc `*.4S392  1 a 1 wreg ]
+[v rc_update_port@logic logic `i  1 p 2 3 ]
+"40
+"37
+[v rc_update_port@rc rc `*.4S392  1 a 1 7 ]
+"181
+} 0
+"258
+[v _shift_bit shift_bit `(v  1 e 1 0 ]
+{
+[s S392 . 17 `E901 1 md 1 0 `uc 1 name 1 1 `i 1 counter 2 2 `i 1 current_state 2 4 `uc 1 syncH 1 6 `uc 1 syncL 1 7 `uc 1 data_H 1 8 `uc 1 data_L 1 9 `uc 1 data_A 1 10 `uc 1 data_B 1 11 `uc 1 data_C 1 12 `i 1 current_data 2 13 `uc 1 current_bit 1 15 `*.27(v 1 fn 1 16 ]
+[v shift_bit@rc rc `*.4S392  1 a 1 wreg ]
+[v shift_bit@rc rc `*.4S392  1 a 1 wreg ]
+[v shift_bit@bt bt `uc  1 p 1 0 ]
+"262
+"258
+[v shift_bit@rc rc `*.4S392  1 a 1 2 ]
+"278
+} 0

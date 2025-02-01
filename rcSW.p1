@@ -1,0 +1,734 @@
+Version 3.2   GCC8 Compiled Intermediate Code
+"38 lib\rcSW.c
+[c E1 0 1 2 3 4 .. ]
+[n E1 Mode SYNC syncHigh syncLow dataL dataH  ]
+[v F22 `(v ~T0 @X0 0 tf1`uc ]
+"17 lib\rcsw.h
+[s S1 `E1 1 `uc 1 `i 1 `i 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `uc 1 `i 1 `uc 1 `*F22 1 ]
+[n S1 . md name counter current_state syncH syncL data_H data_L data_A data_B data_C current_data current_bit fn ]
+"50
+[v _shift_bit `(v ~T0 @X0 0 ef2`*S1`uc ]
+[; ;rcsw.h: 4: typedef enum Mode
+[; ;rcsw.h: 5: {
+[; ;rcsw.h: 6: SYNC,
+[; ;rcsw.h: 7: syncHigh,
+[; ;rcsw.h: 8: syncLow,
+[; ;rcsw.h: 10: dataL,
+[; ;rcsw.h: 11: dataH
+[; ;rcsw.h: 13: };
+[; ;rcsw.h: 16: typedef struct
+[; ;rcsw.h: 17: {
+[; ;rcsw.h: 18: enum Mode md;
+[; ;rcsw.h: 20: char name;
+[; ;rcsw.h: 22: int counter;
+[; ;rcsw.h: 24: int current_state;
+[; ;rcsw.h: 26: char syncH;
+[; ;rcsw.h: 27: char syncL;
+[; ;rcsw.h: 29: char data_H;
+[; ;rcsw.h: 30: char data_L;
+[; ;rcsw.h: 32: char data_A;
+[; ;rcsw.h: 33: char data_B;
+[; ;rcsw.h: 34: char data_C;
+[; ;rcsw.h: 36: int current_data;
+[; ;rcsw.h: 38: char current_bit;
+[; ;rcsw.h: 40: void (*fn)(char name);
+[; ;rcsw.h: 42: } rcSW;
+[; ;rcsw.h: 48: void rc_update_port(rcSW *rc,int logic);
+[; ;rcsw.h: 49: void rc_update_time(rcSW *rc);
+[; ;rcsw.h: 50: void shift_bit(rcSW *rc,char bt);
+"37 lib\rcSW.c
+[v _rc_update_port `(v ~T0 @X0 1 ef2`*S1`i ]
+"38
+{
+[; ;rcSW.c: 37: void rc_update_port(rcSW *rc,int logic)
+[; ;rcSW.c: 38: {
+[e :U _rc_update_port ]
+"37
+[v _rc `*S1 ~T0 @X0 1 r1 ]
+[v _logic `i ~T0 @X0 1 r2 ]
+"38
+[f ]
+[; ;rcSW.c: 40: (*rc).counter = 0;
+"40
+[e = . *U _rc 2 -> 0 `i ]
+[; ;rcSW.c: 41: if(logic != (*rc).current_state)
+"41
+[e $ ! != _logic . *U _rc 3 3  ]
+[; ;rcSW.c: 42: {
+"42
+{
+[; ;rcSW.c: 43: (*rc).current_state = logic;
+"43
+[e = . *U _rc 3 _logic ]
+[; ;rcSW.c: 44: switch((*rc).md)
+"44
+[e $U 5  ]
+[; ;rcSW.c: 45: {
+"45
+{
+[; ;rcSW.c: 46: case SYNC:
+"46
+[e :U 6 ]
+[; ;rcSW.c: 47: (*rc).syncL = 0;
+"47
+[e = . *U _rc 5 -> -> 0 `i `uc ]
+[; ;rcSW.c: 48: (*rc).syncH = 0;
+"48
+[e = . *U _rc 4 -> -> 0 `i `uc ]
+[; ;rcSW.c: 49: (*rc).current_bit = 0;
+"49
+[e = . *U _rc 12 -> -> 0 `i `uc ]
+[; ;rcSW.c: 50: if( logic )
+"50
+[e $ ! != _logic -> 0 `i 7  ]
+[; ;rcSW.c: 51: {
+"51
+{
+[; ;rcSW.c: 52: (*rc).md = syncHigh;
+"52
+[e = . *U _rc 0 . `E1 1 ]
+"53
+}
+[; ;rcSW.c: 53: }else{
+[e $U 8  ]
+[e :U 7 ]
+{
+"55
+}
+[e :U 8 ]
+[; ;rcSW.c: 55: }
+[; ;rcSW.c: 56: break;
+"56
+[e $U 4  ]
+[; ;rcSW.c: 58: case syncHigh:
+"58
+[e :U 9 ]
+[; ;rcSW.c: 59: if( !logic )
+"59
+[e $ ! ! != _logic -> 0 `i 10  ]
+[; ;rcSW.c: 60: {
+"60
+{
+[; ;rcSW.c: 61: if( (*rc).syncH >= ( 1 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) ) ) )
+"61
+[e $ ! >= -> . *U _rc 4 `i * -> 1 `i / - -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i 11  ]
+[; ;rcSW.c: 62: {
+"62
+{
+[; ;rcSW.c: 63: if( (*rc).syncH < ( 1 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) ) )
+"63
+[e $ ! < -> . *U _rc 4 `i * -> 1 `i + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i 12  ]
+[; ;rcSW.c: 64: {
+"64
+{
+[; ;rcSW.c: 65: (*rc).md = syncLow;
+"65
+[e = . *U _rc 0 . `E1 2 ]
+"66
+}
+[; ;rcSW.c: 66: }else{
+[e $U 13  ]
+[e :U 12 ]
+{
+[; ;rcSW.c: 67: (*rc).md = SYNC;
+"67
+[e = . *U _rc 0 . `E1 0 ]
+"68
+}
+[e :U 13 ]
+"70
+}
+[; ;rcSW.c: 68: }
+[; ;rcSW.c: 70: }else{
+[e $U 14  ]
+[e :U 11 ]
+{
+[; ;rcSW.c: 71: (*rc).md = SYNC;
+"71
+[e = . *U _rc 0 . `E1 0 ]
+"72
+}
+[e :U 14 ]
+"73
+}
+[; ;rcSW.c: 72: }
+[; ;rcSW.c: 73: }else{
+[e $U 15  ]
+[e :U 10 ]
+{
+[; ;rcSW.c: 74: (*rc).md = SYNC;
+"74
+[e = . *U _rc 0 . `E1 0 ]
+"75
+}
+[e :U 15 ]
+[; ;rcSW.c: 75: }
+[; ;rcSW.c: 76: break;
+"76
+[e $U 4  ]
+[; ;rcSW.c: 78: case syncLow:
+"78
+[e :U 16 ]
+[; ;rcSW.c: 79: if( logic )
+"79
+[e $ ! != _logic -> 0 `i 17  ]
+[; ;rcSW.c: 80: {
+"80
+{
+[; ;rcSW.c: 81: if( ( (*rc).syncL > ( ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) ) * 31 ) ) && ( (*rc).syncL < ( ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) * 31 ) ) )
+"81
+[e $ ! && > -> . *U _rc 5 `i * / - -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 31 `i < -> . *U _rc 5 `i * + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i -> 31 `i 18  ]
+[; ;rcSW.c: 82: {
+"82
+{
+[; ;rcSW.c: 85: (*rc).data_H = 0;
+"85
+[e = . *U _rc 6 -> -> 0 `i `uc ]
+[; ;rcSW.c: 86: (*rc).md = dataH;
+"86
+[e = . *U _rc 0 . `E1 4 ]
+"88
+}
+[; ;rcSW.c: 88: }else{
+[e $U 19  ]
+[e :U 18 ]
+{
+[; ;rcSW.c: 89: (*rc).md = SYNC;
+"89
+[e = . *U _rc 0 . `E1 0 ]
+"90
+}
+[e :U 19 ]
+"91
+}
+[; ;rcSW.c: 90: }
+[; ;rcSW.c: 91: }else{
+[e $U 20  ]
+[e :U 17 ]
+{
+[; ;rcSW.c: 92: (*rc).md = SYNC;
+"92
+[e = . *U _rc 0 . `E1 0 ]
+"93
+}
+[e :U 20 ]
+[; ;rcSW.c: 93: }
+[; ;rcSW.c: 94: break;
+"94
+[e $U 4  ]
+[; ;rcSW.c: 96: case dataH:
+"96
+[e :U 21 ]
+[; ;rcSW.c: 98: if(!logic)
+"98
+[e $ ! ! != _logic -> 0 `i 22  ]
+[; ;rcSW.c: 99: {
+"99
+{
+[; ;rcSW.c: 101: if( ( (*rc).data_H > ( 1 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) ) ) ) )
+"101
+[e $ ! > -> . *U _rc 6 `i * -> 1 `i / - -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i 23  ]
+[; ;rcSW.c: 102: {
+"102
+{
+[; ;rcSW.c: 103: if( (*rc).data_H < ( 1 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) ) )
+"103
+[e $ ! < -> . *U _rc 6 `i * -> 1 `i + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i 24  ]
+[; ;rcSW.c: 104: {
+"104
+{
+[; ;rcSW.c: 106: (*rc).data_L = 0;
+"106
+[e = . *U _rc 7 -> -> 0 `i `uc ]
+[; ;rcSW.c: 107: (*rc).md = dataL;
+"107
+[e = . *U _rc 0 . `E1 3 ]
+[; ;rcSW.c: 110: (*rc).current_data = 0;
+"110
+[e = . *U _rc 11 -> 0 `i ]
+"112
+}
+[; ;rcSW.c: 112: }else if( (*rc).data_H <= ( (3 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 )) ) )
+[e $U 25  ]
+[e :U 24 ]
+[e $ ! <= -> . *U _rc 6 `i * -> 3 `i + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i 26  ]
+[; ;rcSW.c: 113: {
+"113
+{
+[; ;rcSW.c: 115: (*rc).data_L = 0;
+"115
+[e = . *U _rc 7 -> -> 0 `i `uc ]
+[; ;rcSW.c: 116: (*rc).md = dataL;
+"116
+[e = . *U _rc 0 . `E1 3 ]
+[; ;rcSW.c: 119: (*rc).current_data = 1;
+"119
+[e = . *U _rc 11 -> 1 `i ]
+"120
+}
+[; ;rcSW.c: 120: }else{
+[e $U 27  ]
+[e :U 26 ]
+{
+[; ;rcSW.c: 121: (*rc).md = SYNC;
+"121
+[e = . *U _rc 0 . `E1 0 ]
+"122
+}
+[e :U 27 ]
+[e :U 25 ]
+"123
+}
+[; ;rcSW.c: 122: }
+[; ;rcSW.c: 123: }else{
+[e $U 28  ]
+[e :U 23 ]
+{
+[; ;rcSW.c: 124: (*rc).md = SYNC;
+"124
+[e = . *U _rc 0 . `E1 0 ]
+"125
+}
+[e :U 28 ]
+"126
+}
+[; ;rcSW.c: 125: }
+[; ;rcSW.c: 126: }else{
+[e $U 29  ]
+[e :U 22 ]
+{
+[; ;rcSW.c: 127: (*rc).md = SYNC;
+"127
+[e = . *U _rc 0 . `E1 0 ]
+"128
+}
+[e :U 29 ]
+[; ;rcSW.c: 128: }
+[; ;rcSW.c: 130: break;
+"130
+[e $U 4  ]
+[; ;rcSW.c: 132: case dataL:
+"132
+[e :U 30 ]
+[; ;rcSW.c: 134: if( logic )
+"134
+[e $ ! != _logic -> 0 `i 31  ]
+[; ;rcSW.c: 135: {
+"135
+{
+[; ;rcSW.c: 136: if((*rc).current_data)
+"136
+[e $ ! != . *U _rc 11 -> 0 `i 32  ]
+[; ;rcSW.c: 137: {
+"137
+{
+[; ;rcSW.c: 139: if( (*rc).data_L < (1 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 )) )
+"139
+[e $ ! < -> . *U _rc 7 `i * -> 1 `i + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i 33  ]
+[; ;rcSW.c: 140: {
+"140
+{
+[; ;rcSW.c: 141: if( (*rc).data_L > (1 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) )) )
+"141
+[e $ ! > -> . *U _rc 7 `i * -> 1 `i / - -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i 34  ]
+[; ;rcSW.c: 142: {
+"142
+{
+[; ;rcSW.c: 143: (*rc).data_H = 0;
+"143
+[e = . *U _rc 6 -> -> 0 `i `uc ]
+[; ;rcSW.c: 144: (*rc).md = dataH;
+"144
+[e = . *U _rc 0 . `E1 4 ]
+[; ;rcSW.c: 145: shift_bit(rc,1);
+"145
+[e ( _shift_bit (2 , _rc -> -> 1 `i `uc ]
+"146
+}
+[; ;rcSW.c: 146: }else{
+[e $U 35  ]
+[e :U 34 ]
+{
+[; ;rcSW.c: 148: (*rc).md = SYNC;
+"148
+[e = . *U _rc 0 . `E1 0 ]
+"149
+}
+[e :U 35 ]
+"150
+}
+[; ;rcSW.c: 149: }
+[; ;rcSW.c: 150: }else{
+[e $U 36  ]
+[e :U 33 ]
+{
+[; ;rcSW.c: 152: (*rc).md = SYNC;
+"152
+[e = . *U _rc 0 . `E1 0 ]
+"153
+}
+[e :U 36 ]
+"154
+}
+[; ;rcSW.c: 153: }
+[; ;rcSW.c: 154: }else{
+[e $U 37  ]
+[e :U 32 ]
+{
+[; ;rcSW.c: 156: if( (*rc).data_L < (3 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 )) )
+"156
+[e $ ! < -> . *U _rc 7 `i * -> 3 `i + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i 38  ]
+[; ;rcSW.c: 157: {
+"157
+{
+[; ;rcSW.c: 158: if( (*rc).data_L > (3 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) )) )
+"158
+[e $ ! > -> . *U _rc 7 `i * -> 3 `i / - -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i 39  ]
+[; ;rcSW.c: 159: {
+"159
+{
+[; ;rcSW.c: 160: (*rc).data_H = 0;
+"160
+[e = . *U _rc 6 -> -> 0 `i `uc ]
+[; ;rcSW.c: 161: (*rc).md = dataH;
+"161
+[e = . *U _rc 0 . `E1 4 ]
+[; ;rcSW.c: 162: shift_bit(rc,0);
+"162
+[e ( _shift_bit (2 , _rc -> -> 0 `i `uc ]
+"163
+}
+[; ;rcSW.c: 163: }else{
+[e $U 40  ]
+[e :U 39 ]
+{
+[; ;rcSW.c: 165: (*rc).md = SYNC;
+"165
+[e = . *U _rc 0 . `E1 0 ]
+"166
+}
+[e :U 40 ]
+"167
+}
+[; ;rcSW.c: 166: }
+[; ;rcSW.c: 167: }else{
+[e $U 41  ]
+[e :U 38 ]
+{
+[; ;rcSW.c: 169: (*rc).md = SYNC;
+"169
+[e = . *U _rc 0 . `E1 0 ]
+"170
+}
+[e :U 41 ]
+"171
+}
+[e :U 37 ]
+"174
+}
+[; ;rcSW.c: 170: }
+[; ;rcSW.c: 171: }
+[; ;rcSW.c: 174: }else{
+[e $U 42  ]
+[e :U 31 ]
+{
+[; ;rcSW.c: 175: (*rc).md = SYNC;
+"175
+[e = . *U _rc 0 . `E1 0 ]
+"176
+}
+[e :U 42 ]
+[; ;rcSW.c: 176: }
+[; ;rcSW.c: 178: break;
+"178
+[e $U 4  ]
+"179
+}
+[; ;rcSW.c: 179: }
+[e $U 4  ]
+"44
+[e :U 5 ]
+[e [\ . *U _rc 0 , $ . `E1 0 6
+ , $ . `E1 1 9
+ , $ . `E1 2 16
+ , $ . `E1 4 21
+ , $ . `E1 3 30
+ 4 ]
+"179
+[e :U 4 ]
+"180
+}
+[e :U 3 ]
+[; ;rcSW.c: 180: }
+[; ;rcSW.c: 181: }
+"181
+[e :UE 2 ]
+}
+"184
+[v _rc_update_time `(v ~T0 @X0 1 ef1`*S1 ]
+"185
+{
+[; ;rcSW.c: 184: void rc_update_time(rcSW *rc)
+[; ;rcSW.c: 185: {
+[e :U _rc_update_time ]
+"184
+[v _rc `*S1 ~T0 @X0 1 r1 ]
+"185
+[f ]
+[; ;rcSW.c: 187: (*rc).counter++;
+"187
+[e ++ . *U _rc 2 -> 1 `i ]
+[; ;rcSW.c: 189: if((*rc).counter == 5)
+"189
+[e $ ! == . *U _rc 2 -> 5 `i 44  ]
+[; ;rcSW.c: 190: {
+"190
+{
+[; ;rcSW.c: 191: (*rc).counter = 0;
+"191
+[e = . *U _rc 2 -> 0 `i ]
+[; ;rcSW.c: 193: switch((*rc).md)
+"193
+[e $U 46  ]
+[; ;rcSW.c: 194: {
+"194
+{
+[; ;rcSW.c: 195: case syncLow:
+"195
+[e :U 47 ]
+[; ;rcSW.c: 196: (*rc).syncL++;
+"196
+[e ++ . *U _rc 5 -> -> 1 `i `uc ]
+[; ;rcSW.c: 197: if((*rc).syncL > 230)
+"197
+[e $ ! > -> . *U _rc 5 `i -> 230 `i 48  ]
+[; ;rcSW.c: 198: {
+"198
+{
+[; ;rcSW.c: 199: (*rc).md = SYNC;
+"199
+[e = . *U _rc 0 . `E1 0 ]
+"200
+}
+[e :U 48 ]
+[; ;rcSW.c: 200: }
+[; ;rcSW.c: 201: break;
+"201
+[e $U 45  ]
+[; ;rcSW.c: 203: case syncHigh:
+"203
+[e :U 49 ]
+[; ;rcSW.c: 204: (*rc).syncH++;
+"204
+[e ++ . *U _rc 4 -> -> 1 `i `uc ]
+[; ;rcSW.c: 205: if((*rc).syncH > 20)
+"205
+[e $ ! > -> . *U _rc 4 `i -> 20 `i 50  ]
+[; ;rcSW.c: 206: {
+"206
+{
+[; ;rcSW.c: 207: (*rc).md = SYNC;
+"207
+[e = . *U _rc 0 . `E1 0 ]
+"208
+}
+[e :U 50 ]
+[; ;rcSW.c: 208: }
+[; ;rcSW.c: 209: break;
+"209
+[e $U 45  ]
+[; ;rcSW.c: 211: case dataH:
+"211
+[e :U 51 ]
+[; ;rcSW.c: 213: (*rc).data_H++;
+"213
+[e ++ . *U _rc 6 -> -> 1 `i `uc ]
+[; ;rcSW.c: 214: if((*rc).data_H > 20)
+"214
+[e $ ! > -> . *U _rc 6 `i -> 20 `i 52  ]
+[; ;rcSW.c: 215: {
+"215
+{
+[; ;rcSW.c: 216: (*rc).data_H = 0;
+"216
+[e = . *U _rc 6 -> -> 0 `i `uc ]
+[; ;rcSW.c: 217: (*rc).md = SYNC;
+"217
+[e = . *U _rc 0 . `E1 0 ]
+"218
+}
+[e :U 52 ]
+[; ;rcSW.c: 218: }
+[; ;rcSW.c: 220: break;
+"220
+[e $U 45  ]
+[; ;rcSW.c: 222: case dataL:
+"222
+[e :U 53 ]
+[; ;rcSW.c: 224: (*rc).data_L++;
+"224
+[e ++ . *U _rc 7 -> -> 1 `i `uc ]
+[; ;rcSW.c: 225: if((*rc).data_L > 20)
+"225
+[e $ ! > -> . *U _rc 7 `i -> 20 `i 54  ]
+[; ;rcSW.c: 226: {
+"226
+{
+[; ;rcSW.c: 227: if( (*rc).data_H < ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) )
+"227
+[e $ ! < -> . *U _rc 6 `i + / + -> 350 `i / * -> 350 `i -> 70 `i -> 100 `i * -> 20 `i -> 5 `i -> 2 `i 55  ]
+[; ;rcSW.c: 228: {
+"228
+{
+[; ;rcSW.c: 231: (*rc).current_state = 0;
+"231
+[e = . *U _rc 3 -> 0 `i ]
+[; ;rcSW.c: 232: (*rc).current_bit = 0;
+"232
+[e = . *U _rc 12 -> -> 0 `i `uc ]
+[; ;rcSW.c: 233: (*rc).counter = 0;
+"233
+[e = . *U _rc 2 -> 0 `i ]
+[; ;rcSW.c: 234: (*rc).syncL = (*rc).data_L;
+"234
+[e = . *U _rc 5 . *U _rc 7 ]
+[; ;rcSW.c: 235: (*rc).syncH = (*rc).data_H;
+"235
+[e = . *U _rc 4 . *U _rc 6 ]
+[; ;rcSW.c: 236: (*rc).md = syncLow;
+"236
+[e = . *U _rc 0 . `E1 2 ]
+[; ;rcSW.c: 237: (*rc).data_L = 0;
+"237
+[e = . *U _rc 7 -> -> 0 `i `uc ]
+[; ;rcSW.c: 238: (*rc).data_H = 0;
+"238
+[e = . *U _rc 6 -> -> 0 `i `uc ]
+[; ;rcSW.c: 239: (*rc).fn((*rc).name);
+"239
+[e ( *U . *U _rc 13 (1 . *U _rc 1 ]
+"240
+}
+[; ;rcSW.c: 240: }else{
+[e $U 56  ]
+[e :U 55 ]
+{
+[; ;rcSW.c: 242: (*rc).fn((*rc).name);
+"242
+[e ( *U . *U _rc 13 (1 . *U _rc 1 ]
+[; ;rcSW.c: 243: (*rc).syncL = 0;
+"243
+[e = . *U _rc 5 -> -> 0 `i `uc ]
+[; ;rcSW.c: 244: (*rc).syncH = 0;
+"244
+[e = . *U _rc 4 -> -> 0 `i `uc ]
+[; ;rcSW.c: 245: (*rc).md = SYNC;
+"245
+[e = . *U _rc 0 . `E1 0 ]
+[; ;rcSW.c: 246: (*rc).data_L = 0;
+"246
+[e = . *U _rc 7 -> -> 0 `i `uc ]
+[; ;rcSW.c: 247: (*rc).data_H = 0;
+"247
+[e = . *U _rc 6 -> -> 0 `i `uc ]
+"249
+}
+[e :U 56 ]
+"251
+}
+[e :U 54 ]
+[; ;rcSW.c: 249: }
+[; ;rcSW.c: 251: }
+[; ;rcSW.c: 253: break;
+"253
+[e $U 45  ]
+"254
+}
+[; ;rcSW.c: 254: }
+[e $U 45  ]
+"193
+[e :U 46 ]
+[e [\ . *U _rc 0 , $ . `E1 2 47
+ , $ . `E1 1 49
+ , $ . `E1 4 51
+ , $ . `E1 3 53
+ 45 ]
+"254
+[e :U 45 ]
+"255
+}
+[e :U 44 ]
+[; ;rcSW.c: 255: }
+[; ;rcSW.c: 256: }
+"256
+[e :UE 43 ]
+}
+"258
+[v _shift_bit `(v ~T0 @X0 1 ef2`*S1`uc ]
+"259
+{
+[; ;rcSW.c: 258: void shift_bit(rcSW *rc,char bt)
+[; ;rcSW.c: 259: {
+[e :U _shift_bit ]
+"258
+[v _rc `*S1 ~T0 @X0 1 r1 ]
+[v _bt `uc ~T0 @X0 1 r2 ]
+"259
+[f ]
+[; ;rcSW.c: 262: if ((*rc).current_bit < 8)
+"262
+[e $ ! < -> . *U _rc 12 `i -> 8 `i 58  ]
+[; ;rcSW.c: 263: {
+"263
+{
+[; ;rcSW.c: 264: (*rc).data_A = ((*rc).data_A << 1) | bt;
+"264
+[e = . *U _rc 8 -> | << -> . *U _rc 8 `i -> 1 `i -> _bt `i `uc ]
+"265
+}
+[; ;rcSW.c: 265: } else if ((*rc).current_bit < 16)
+[e $U 59  ]
+[e :U 58 ]
+[e $ ! < -> . *U _rc 12 `i -> 16 `i 60  ]
+[; ;rcSW.c: 266: {
+"266
+{
+[; ;rcSW.c: 267: (*rc).data_B = ((*rc).data_B << 1) | bt;
+"267
+[e = . *U _rc 9 -> | << -> . *U _rc 9 `i -> 1 `i -> _bt `i `uc ]
+"268
+}
+[; ;rcSW.c: 268: } else if ((*rc).current_bit < 24)
+[e $U 61  ]
+[e :U 60 ]
+[e $ ! < -> . *U _rc 12 `i -> 24 `i 62  ]
+[; ;rcSW.c: 269: {
+"269
+{
+[; ;rcSW.c: 270: (*rc).data_C = ((*rc).data_C << 1) | bt;
+"270
+[e = . *U _rc 10 -> | << -> . *U _rc 10 `i -> 1 `i -> _bt `i `uc ]
+"271
+}
+[e :U 62 ]
+"273
+[e :U 61 ]
+[e :U 59 ]
+[; ;rcSW.c: 271: }
+[; ;rcSW.c: 273: (*rc).current_bit++;
+[e ++ . *U _rc 12 -> -> 1 `i `uc ]
+[; ;rcSW.c: 275: if ((*rc).current_bit >= 24) {
+"275
+[e $ ! >= -> . *U _rc 12 `i -> 24 `i 63  ]
+{
+[; ;rcSW.c: 276: (*rc).current_bit = 0;
+"276
+[e = . *U _rc 12 -> -> 0 `i `uc ]
+"277
+}
+[e :U 63 ]
+[; ;rcSW.c: 277: }
+[; ;rcSW.c: 278: }
+"278
+[e :UE 57 ]
+}

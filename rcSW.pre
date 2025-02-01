@@ -1,0 +1,292 @@
+
+# 1 "lib\rcSW.c"
+
+# 4 "lib\rcsw.h"
+typedef enum Mode
+{
+SYNC,
+syncHigh,
+syncLow,
+
+dataL,
+dataH
+
+};
+
+
+typedef struct
+{
+enum Mode md;
+
+char name;
+
+int counter;
+
+int current_state;
+
+char syncH;
+char syncL;
+
+char data_H;
+char data_L;
+
+char data_A;
+char data_B;
+char data_C;
+
+int current_data;
+
+char current_bit;
+
+void (*fn)(char name);
+
+} rcSW;
+
+# 48
+void rc_update_port(rcSW *rc,int logic);
+void rc_update_time(rcSW *rc);
+void shift_bit(rcSW *rc,char bt);
+
+# 37 "lib\rcSW.c"
+void rc_update_port(rcSW *rc,int logic)
+{
+
+(*rc).counter = 0;
+if(logic != (*rc).current_state)
+{
+(*rc).current_state = logic;
+switch((*rc).md)
+{
+case SYNC:
+(*rc).syncL = 0;
+(*rc).syncH = 0;
+(*rc).current_bit = 0;
+if( logic )
+{
+(*rc).md = syncHigh;
+}else{
+
+}
+break;
+
+case syncHigh:
+if( !logic )
+{
+if( (*rc).syncH >= ( 1 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) ) ) )
+{
+if( (*rc).syncH < ( 1 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) ) )
+{
+(*rc).md = syncLow;
+}else{
+(*rc).md = SYNC;
+}
+
+}else{
+(*rc).md = SYNC;
+}
+}else{
+(*rc).md = SYNC;
+}
+break;
+
+case syncLow:
+if( logic )
+{
+if( ( (*rc).syncL > ( ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) ) * 31 ) ) && ( (*rc).syncL < ( ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) * 31 ) ) )
+{
+
+
+(*rc).data_H = 0;
+(*rc).md = dataH;
+
+}else{
+(*rc).md = SYNC;
+}
+}else{
+(*rc).md = SYNC;
+}
+break;
+
+case dataH:
+
+if(!logic)
+{
+
+if( ( (*rc).data_H > ( 1 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) ) ) ) )
+{
+if( (*rc).data_H < ( 1 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) ) )
+{
+
+(*rc).data_L = 0;
+(*rc).md = dataL;
+
+
+(*rc).current_data = 0;
+
+}else if( (*rc).data_H <= ( (3 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 )) ) )
+{
+
+(*rc).data_L = 0;
+(*rc).md = dataL;
+
+
+(*rc).current_data = 1;
+}else{
+(*rc).md = SYNC;
+}
+}else{
+(*rc).md = SYNC;
+}
+}else{
+(*rc).md = SYNC;
+}
+
+break;
+
+case dataL:
+
+if( logic )
+{
+if((*rc).current_data)
+{
+
+if( (*rc).data_L < (1 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 )) )
+{
+if( (*rc).data_L > (1 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) )) )
+{
+(*rc).data_H = 0;
+(*rc).md = dataH;
+shift_bit(rc,1);
+}else{
+
+(*rc).md = SYNC;
+}
+}else{
+
+(*rc).md = SYNC;
+}
+}else{
+
+if( (*rc).data_L < (3 * ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 )) )
+{
+if( (*rc).data_L > (3 * ( ( 350 - ( 350 * 70 / 100 ) ) / ( 20 * 5 ) )) )
+{
+(*rc).data_H = 0;
+(*rc).md = dataH;
+shift_bit(rc,0);
+}else{
+
+(*rc).md = SYNC;
+}
+}else{
+
+(*rc).md = SYNC;
+}
+}
+
+
+}else{
+(*rc).md = SYNC;
+}
+
+break;
+}
+}
+}
+
+
+void rc_update_time(rcSW *rc)
+{
+
+(*rc).counter++;
+
+if((*rc).counter == 5)
+{
+(*rc).counter = 0;
+
+switch((*rc).md)
+{
+case syncLow:
+(*rc).syncL++;
+if((*rc).syncL > 230)
+{
+(*rc).md = SYNC;
+}
+break;
+
+case syncHigh:
+(*rc).syncH++;
+if((*rc).syncH > 20)
+{
+(*rc).md = SYNC;
+}
+break;
+
+case dataH:
+
+(*rc).data_H++;
+if((*rc).data_H > 20)
+{
+(*rc).data_H = 0;
+(*rc).md = SYNC;
+}
+
+break;
+
+case dataL:
+
+(*rc).data_L++;
+if((*rc).data_L > 20)
+{
+if( (*rc).data_H < ( ( 350 + ( 350 * 70 / 100 ) ) / ( 20 * 5 ) + 2 ) )
+{
+
+
+(*rc).current_state = 0;
+(*rc).current_bit = 0;
+(*rc).counter = 0;
+(*rc).syncL = (*rc).data_L;
+(*rc).syncH = (*rc).data_H;
+(*rc).md = syncLow;
+(*rc).data_L = 0;
+(*rc).data_H = 0;
+(*rc).fn((*rc).name);
+}else{
+
+(*rc).fn((*rc).name);
+(*rc).syncL = 0;
+(*rc).syncH = 0;
+(*rc).md = SYNC;
+(*rc).data_L = 0;
+(*rc).data_H = 0;
+
+}
+
+}
+
+break;
+}
+}
+}
+
+void shift_bit(rcSW *rc,char bt)
+{
+
+
+if ((*rc).current_bit < 8)
+{
+(*rc).data_A = ((*rc).data_A << 1) | bt;
+} else if ((*rc).current_bit < 16)
+{
+(*rc).data_B = ((*rc).data_B << 1) | bt;
+} else if ((*rc).current_bit < 24)
+{
+(*rc).data_C = ((*rc).data_C << 1) | bt;
+}
+
+(*rc).current_bit++;
+
+if ((*rc).current_bit >= 24) {
+(*rc).current_bit = 0;
+}
+}

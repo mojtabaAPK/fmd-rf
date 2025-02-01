@@ -13,4 +13,6 @@ read code in debug mode
 
 4 press F5 to run
 
-5 in output u will see the code 
+5 press remote control key to see the code
+
+6 in output u will see the code 

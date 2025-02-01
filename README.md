@@ -1,8 +1,10 @@
 ![code_debug](https://github.com/user-attachments/assets/306e87a4-8ccf-4502-aaa0-8bd58682bb63)
 
 
-
 read code in debug mode
+
+
+micro FT60E211
 
 
 1 connect programmer to ur pc start to debug 
